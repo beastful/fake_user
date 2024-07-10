@@ -7,16 +7,11 @@ class FakeUserState {
         changeContext(this.__fakeuser__.ctx)
         this.__fakeuser__.applyContext()
         await this.__fetch__()
-        return this
+        return this.__fakeuser__
     }
     model(fun) {
-        let mod = fun(this.__rawdata__)
-        mod.ok(() => {
-            this.__fakeuser__.setState(new FakeUserOk(this.__fakeuser__))
-        })
-        mod.end(() => {
-            this.__fakeuser__.setState(new FakeUserEnd(this.__fakeuser__))
-        })
+        let mod = fun(this.__rawdata__, this.__fakeuser__)
+        mod.check()
         return mod
     }
     async __fetch__() {
@@ -28,14 +23,20 @@ class FakeUserState {
 }
 
 class FakeUserOk extends FakeUserState {
-    constructor(...args) {
-        super(...args)
+    constructor(fakeuser) {
+        super(fakeuser)
     }
 }
 
 class FakeUserEnd extends FakeUserState {
-    constructor(...args) {
-        super(...args)
+    constructor(fakeuser) {
+        super(fakeuser)
+    }
+    async retrieve() {
+        return this.__fakeuser__
+    }
+    model(fun) {
+        return null
     }
 }
 

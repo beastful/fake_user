@@ -27,7 +27,13 @@ module.exports = class FakeUser {
     async retrieve(fun) {
         return await this.__state__.retrieve(fun)
     }
+    model(...args) {
+        return this.__state__.model(...args)
+    }
     getUrl() {
         return this.url
+    }
+    getState() {
+        return this.__state__
     }
 }

@@ -2,22 +2,18 @@ const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
 
 module.exports = class ParseModel {
-    constructor(data) {
-        this.okFun = null;
-        this.endFun = null;
+    constructor(data, instance) {
         this.__rawdata__ = data;
         this.__dom__ = new JSDOM(this.__rawdata__);
         this.__recordclass__ = null;
     }
-    ok(fun) {
-        this.okFun = fun;
-    }
-    end(fun) {
-        this.okFun = fun;
-    }
-    from(classname) {
+   from(classname) {
         this.__recordclass__ = classname
         return this
+    }
+    getSingle(selector) {
+        return this.__dom__.window
+            .document.querySelector(selector)
     }
     collect(arr, names, fun) {
         const data = []
@@ -34,4 +30,5 @@ module.exports = class ParseModel {
         }
         return data
     }
+    check() {}
 }
